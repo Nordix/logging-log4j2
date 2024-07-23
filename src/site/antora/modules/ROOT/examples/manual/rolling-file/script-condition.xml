@@ -23,12 +23,14 @@
   <Appenders>
     <!-- tag::appender[] -->
     <RollingFile name="FILE"
-                 filePattern="/var/log/app.%d{yyyy-MM-dd}.log.gz"> <!--1-->
+                 filePattern="/var/log/app.%d{yyyy-MM-dd}.log.gz">
       <JsonTemplateLayout/>
       <DirectWriteRolloverStrategy>
-        <Delete basePath="/var/log"> <!--2-->
-          <IfFileName regex="app\.\d{4}-\d{2}-\d{2}\.log\.gz"/> <!--3-->
-          <IfLastModified age="P15D"/>
+        <Delete basePath="/var/log">
+          <ScriptCondition>
+            <ScriptFile path="script-condition.groovy"
+                        language="groovy"/>
+          </ScriptCondition>
         </Delete>
       </DirectWriteRolloverStrategy>
       <TimeBasedTriggeringPolicy/>

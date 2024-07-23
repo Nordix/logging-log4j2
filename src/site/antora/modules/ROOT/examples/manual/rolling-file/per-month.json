@@ -4,15 +4,12 @@
       // tag::appender[]
       "RollingFile": {
         "name": "FILE",
-        "filePattern": "/var/log/app-%{yyyy-MM}/%d{yyyy-MM-dd}.log.gz", // <1>
+        "filePattern": "/var/log/app/%{yyyy-MM}/%d{yyyy-MM-dd}.log.gz", // <1>
         "JsonTemplateLayout": {},
         "DirectWriteRolloverStrategy": {
           "Delete": {
-            "basePath": "/var/log",
+            "basePath": "/var/log/app",
             "maxDepth": 2, // <2>
-            "IfFileName": {
-              "glob": "app-*/*.log.gz"
-            },
             "IfLastModified": {
               "age": "P90D"
             }

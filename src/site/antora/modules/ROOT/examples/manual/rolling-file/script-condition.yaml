@@ -19,14 +19,14 @@ Configuration:
     # tag::appender[]
     RollingFile:
       name: "FILE"
-      filePattern: "/var/log/app/%d{yyyy-MM}/%d{yyyy-MM-dd}.log.gz" # <1>
+      filePattern: "/var/log/app.%d{yyyy-MM-dd}.log.gz"
       JsonTemplateLayout: {}
       DirectWriteRolloverStrategy:
         Delete:
-          basePath: "/var/log/app"
-          maxDepth: 2 # <2>
-          IfLastModified:
-            age: "P90D"
+          basePath: "/var/log"
+          ScriptCondition:
+            path: "script-condition.groovy"
+            language: "groovy"
       TimeBasedTriggeringPolicy: {}
     # end::appender[]
   Loggers:

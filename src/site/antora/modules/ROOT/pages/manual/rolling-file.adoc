@@ -1485,6 +1485,8 @@ xref:manual/configuration.adoc#property-substitution[the global `Properties` con
 
 |===
 
+For an example of `ScriptCondition` usage, see the <<using-script-condition>> example below.
+
 xref:plugin-reference.adoc#org-apache-logging-log4j_log4j-core_org-apache-logging-log4j-core-appender-rolling-action-ScriptCondition[{open-book} Plugin reference for `ScriptCondition`]
 
 [#recipes]
@@ -1604,7 +1606,64 @@ include::example$manual/rolling-file/timestamped.properties[tag=appender]
 ====
 
 <1> Only the `filePattern` attribute is used, since we use the <<DirectWriteRolloverStrategy,`DirectWriteRolloverStrategy`>>.
-<2> An explicit `Delete` action is provided
+<2> An explicit `Delete` action is provided.
+<3> You can select the files to delete using a regular expression or a simpler `app.*.log.gz` glob pattern.
+
+[#using-script-condition]
+=== Using `ScriptCondition`
+
+If the supplied <<PathCondition,path conditions>> are not sufficient, you can use a <<ScriptCondition>> with an arbitrary script.
+
+The <<timestamped,example above>> can be rewritten into the following Groovy script:
+
+.Snippet from an example {antora-examples-url}/manual/rolling-file/script-condition.groovy[`script-condition.groovy`]
+[source,groovy]
+----
+include::example$manual/rolling-file/script-condition.groovy[tag=script]
+----
+
+<1> Adding xref:manual/status-logger.adoc[] calls in your script might help in debugging it.
+<2> link:../javadoc/log4j-core/org/apache/logging/log4j/core/appender/rolling/action/PathWithAttributes.html#getPath()[`PathWithAttributes.getPath()`]
+always starts with `basePath`, so we need to relativize it.
+<3> Equivalent to the <<IfLastModified>> condition.
+<4> Equivalent to the <<IfFileName>> condition.
+
+You can use the script in your configuration file as follows:
+
+[tabs]
+====
+XML::
++
+.Snippet from an example {antora-examples-url}/manual/rolling-file/script-condition.xml[`log4j2.xml`]
+[source,xml,indent=0]
+----
+include::example$manual/rolling-file/script-condition.xml[tag=appender]
+----
+
+JSON::
++
+.Snippet from an example {antora-examples-url}/manual/rolling-file/script-condition.json[`log4j2.json`]
+[source,json,indent=0]
+----
+include::example$manual/rolling-file/script-condition.json[tag=appender]
+----
+
+YAML::
++
+.Snippet from an example {antora-examples-url}/manual/rolling-file/script-condition.yaml[`log4j2.yaml`]
+[source,yaml,indent=0]
+----
+include::example$manual/rolling-file/script-condition.yaml[tag=appender]
+----
+
+Properties::
++
+.Snippet from an example {antora-examples-url}/manual/rolling-file/script-condition.properties[`log4j2.properties`]
+[source,properties,indent=0]
+----
+include::example$manual/rolling-file/script-condition.properties[tag=appender]
+----
+====
 
 [#per-month]
 === Separate folder per month
